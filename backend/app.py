@@ -1,6 +1,6 @@
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from flask import Flask, jsonify, render_template, request, session, redirect, url_for
+from flask import Flask, flash, jsonify, render_template, request, session, redirect, url_for
 from db_config import get_db_connection
 import os
 
@@ -40,7 +40,12 @@ def get_menu():
 def ui():
     if "user_id" not in session:
         return redirect(url_for("login"))
+
+    if session.get("role") == "admin":
+        return redirect(url_for("admin_orders"))
+
     return render_template("index.html")
+
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -174,8 +179,11 @@ def my_orders():
 
 @app.route("/admin/orders")
 def admin_orders():
-    if "user_id" not in session or session.get("role") != "admin":
+    if "user_id" not in session:
         return redirect(url_for("login"))
+
+    if session.get("role") != "admin":
+        return "Access denied ❌", 403
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -196,10 +204,33 @@ def admin_orders():
 
     return render_template("admin_orders.html", orders=orders)
 
+@app.route("/admin/update-order-status", methods=["POST"])
+def update_order_status():
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect(url_for("login"))
 
-@app.route("/debug-session")
-def debug_session():
-    return str(dict(session))
+    order_id = request.form["order_id"]
+    status = request.form["status"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE orders SET status = %s WHERE order_id = %s",
+        (status, order_id)
+    )
+    conn.commit()
+    conn.close()
+
+    flash("Order status updated successfully ✅")
+    return redirect(url_for("admin_orders"))
+
+
+
+
+
+# @app.route("/debug-session")
+# def debug_session():
+#     return str(dict(session))
 
 
 if __name__ == "__main__":

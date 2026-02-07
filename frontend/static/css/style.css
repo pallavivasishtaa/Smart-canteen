@@ -1,0 +1,35 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 12px;
+  border: none;
+}
+
+.card h3 {
+  font-weight: 600;
+  color: #333;
+}
+
+.btn-primary {
+  background-color: #0d6efd;
+  border-radius: 8px;
+}
+
+.btn-primary:hover {
+  background-color: #084cdf;
+}
+
+.form-control {
+  border-radius: 8px;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}

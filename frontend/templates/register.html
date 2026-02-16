@@ -1,62 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Register | Smart Canteen</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Bootstrap -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 </head>
 
-<body class="bg-light">
+<body>
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-5">
+  <div class="auth-page">
 
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h3 class="text-center mb-4">Create Account</h3>
+    <!-- LEFT IMAGE -->
+    <div class="auth-image register-img"></div>
 
-          <form method="POST" action="/register">
+    <!-- RIGHT CONTENT -->
+    <div class="auth-content">
+      <div class="auth-card">
+        <h2>Create Account</h2>
+        <p>Join Smart Canteen today</p>
 
-            <div class="mb-3">
-              <label class="form-label">Full Name</label>
-              <input type="text" name="name" class="form-control" placeholder="Enter your name">
-            </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <p style="color: green; margin-bottom: 15px;">
+          {{ messages[0] }}
+        </p>
+        <script>
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2500);
+        </script>
+        {% endif %}
+        {% endwith %}
 
-            <div class="mb-3">
-              <label class="form-label">Email</label>
-              <input type="email" name="email" class="form-control" placeholder="Enter email">
-            </div>
 
-            <div class="mb-3">
-              <label class="form-label">Password</label>
-              <input type="password" name="password" class="form-control" placeholder="Create password">
-            </div>
+        <form method="POST">
+          <input type="text" name="name" placeholder="Full Name" required>
+          <input type="email" name="email" placeholder="Email" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <button type="submit">Register</button>
+        </form>
 
-            <button type="submit" class="btn btn-primary w-100">
-              Register
-            </button>
-
-            <p class="text-center mt-3">
-              Already have an account?
-              <a href="/login">Login</a>
-            </p>
-          </form>
-
+        <div class="auth-footer">
+          Already have an account?
+          <a href="/login">Login</a>
         </div>
-      </div>
 
+        <a href="/" class="back-home">← Back to Home</a>
+      </div>
     </div>
+
   </div>
-</div>
 
 </body>
+
 </html>

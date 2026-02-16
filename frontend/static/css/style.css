@@ -1,35 +1,171 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+/* HERO */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(15,23,42,0.6), rgba(15,23,42,0.6)),
+        url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    max-width: 700px;
+}
+
+.hero-content h1 {
+    font-size: 52px;
+    margin-bottom: 15px;
+}
+
+.hero-content p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    padding: 14px 34px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn.primary {
+    background: #2563eb;
+    color: white;
+}
+
+.btn.secondary {
+    background: white;
+    color: #2563eb;
+}
+
+/* SECTIONS */
+.section {
+    padding: 80px 100px;
+    text-align: center;
+}
+
+.section h2 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    color: #475569;
+    margin-bottom: 50px;
+    font-size: 18px;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
 }
 
 .card {
-  border-radius: 12px;
-  border: none;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
 }
 
 .card h3 {
-  font-weight: 600;
-  color: #333;
+    margin-bottom: 10px;
+    color: #2563eb;
 }
 
-.btn-primary {
-  background-color: #0d6efd;
-  border-radius: 8px;
+/* IMAGE SECTION */
+.bg-image {
+    background: url("https://images.unsplash.com/photo-1600891963935-c1b69a60a347");
+    background-size: cover;
+    background-position: center;
 }
 
-.btn-primary:hover {
-  background-color: #084cdf;
+.overlay {
+    background: rgba(255,255,255,0.92);
+    padding: 70px;
+    border-radius: 20px;
 }
 
-.form-control {
-  border-radius: 8px;
+/* FOOTER */
+footer {
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 20px;
 }
 
-a {
-  text-decoration: none;
-  font-weight: 500;
+
+/* ===== USER DASHBOARD ===== */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1e293b;
+    padding: 15px 25px;
+    color: white;
 }
 
-a:hover {
-  text-decoration: underline;
+.navbar h2 {
+    margin: 0;
+}
+
+.navbar .nav-right span {
+    margin-right: 15px;
+}
+
+.logout-btn {
+    color: white;
+    text-decoration: none;
+    background: #dc2626;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.dashboard-container {
+    padding: 30px;
+}
+
+.dashboard-actions {
+    margin-top: 20px;
+}
+
+.dashboard-actions button {
+    padding: 10px 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #2563eb;
+    color: white;
+}
+
+.dashboard-actions button:hover {
+    background: #1d4ed8;
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard | Smart Canteen</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-left">
+        <h2>Smart Canteen</h2>
+    </div>
+
+    <div class="nav-right">
+        <span>Welcome, {{ session.get('user_name') }}</span>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="dashboard-container">
+
+    <h3>Menu</h3>
+
+    <div id="menu-container">
+        <!-- Menu items will come here -->
+        <p>Menu items will be displayed here.</p>
+    </div>
+
+    <div class="dashboard-actions">
+        <button onclick="placeOrder()">Place Order</button>
+        <button onclick="viewOrders()">View Order History</button>
+    </div>
+
+    <div id="order-history">
+        <!-- Order history will load here -->
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>

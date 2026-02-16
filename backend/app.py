@@ -22,29 +22,47 @@ app.secret_key = "smart_canteen_secret_key"
 
 @app.route("/")
 def home():
-    return "Smart Canteen Backend Running 🚀"
-
-@app.route("/menu")
-def get_menu():
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM menu WHERE available = TRUE")
-        menu_items = cursor.fetchall()
-        conn.close()
-        return jsonify(menu_items)
-    except Exception as e:
-        return jsonify({"error": str(e)})
-
-@app.route("/ui")
-def ui():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    if session.get("role") == "admin":
-        return redirect(url_for("admin_orders"))
-
     return render_template("index.html")
+
+
+# @app.route("/menu")
+# def get_menu():
+#     try:
+#         conn = get_db_connection()
+#         cursor = conn.cursor(dictionary=True)
+#         cursor.execute("SELECT * FROM menu WHERE available = TRUE")
+#         menu_items = cursor.fetchall()
+#         conn.close()
+#         return jsonify(menu_items)
+#     except Exception as e:
+#         return jsonify({"error": str(e)})
+
+# @app.route("/ui")
+# def ui():
+#     if "user_id" not in session:
+#         return redirect(url_for("login"))
+
+#     if session.get("role") == "admin":
+#         return redirect(url_for("admin_orders"))
+
+#     return render_template(
+#         "index.html",
+#         logged_in=True,
+#         username=session.get("user_name")
+#     )
+
+
+# @app.route("/dashboard")
+# def user_dashboard():
+#     if "user_id" not in session:
+#         return redirect(url_for("login"))
+
+#     return render_template(
+#         "user_dashboard.html",
+#         user_name=session.get("user_name")
+#     )
+
+
 
 
 
@@ -56,25 +74,41 @@ def login():
 
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+
+        # 🔑 fetch user by email ONLY
+        cursor.execute(
+            "SELECT * FROM users WHERE email=%s",
+            (email,)
+        )
         user = cursor.fetchone()
         conn.close()
 
+        # 🔑 check hashed password
         if user and check_password_hash(user["password"], password):
-            session.clear()  # IMPORTANT
             session["user_id"] = user["user_id"]
             session["user_name"] = user["name"]
             session["role"] = user["role"]
 
-            # Redirect based on role
-            if user["role"] == "admin":
-                return redirect(url_for("admin_orders"))
-            else:
-                return redirect(url_for("ui"))
+            return redirect("/dashboard")
 
-        return "Invalid email or password ❌ <a href='/login'>Try again</a>"
+        flash("Invalid email or password")
+        return redirect("/login")
 
     return render_template("login.html")
+
+
+
+
+@app.route("/dashboard")
+def dashboard():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    return render_template("user_dashboard.html")
+
+
+
+
 
 
 
@@ -87,26 +121,22 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        hashed_password = generate_password_hash(password)
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-        try:
-            conn = get_db_connection()
-            cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (name, email, password, role) VALUES (%s, %s, %s, 'user')",
+            (name, email, password)
+        )
+        conn.commit()
+        conn.close()
 
-            cursor.execute(
-                "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
-                (name, email, hashed_password)
-            )
-
-            conn.commit()
-            conn.close()
-
-            return "Registration successful ✅ <a href='/login'>Login</a>"
-
-        except Exception as e:
-            return f"Error: {e}"
+        # ✅ stay on same page, show message
+        flash("Registration successful! Redirecting to login...")
+        return redirect(url_for("register"))
 
     return render_template("register.html")
+
 
 @app.route("/logout")
 def logout():
@@ -224,8 +254,25 @@ def update_order_status():
     flash("Order status updated successfully ✅")
     return redirect(url_for("admin_orders"))
 
+@app.route("/menu")
+def menu():
+    if "user_id" not in session:
+        return {"error": "Unauthorized"}, 401
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT item_id, item_name, price FROM menu")
+    items = cursor.fetchall()
+
+    conn.close()
+    return items
 
 
+
+@app.route("/check-session")
+def check_session():
+    return str(dict(session))
 
 
 # @app.route("/debug-session")

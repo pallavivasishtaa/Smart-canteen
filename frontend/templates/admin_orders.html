@@ -68,6 +68,7 @@
                                     <th style="width: 180px;">Action</th>
                                     <th style="width: 180px;">Order Time</th>
 
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,30 +79,32 @@
                                     <td>{{ order.item_name }}</td>
                                     <td>{{ order.quantity }}</td>
                                     <td>
+                                        {{ order.status }}
+                                    </td>
+
+                                    <!-- ACTION COLUMN (DROPDOWN + UPDATE) -->
                                     <td>
-                                        <form method="POST" action="/admin/update-order-status">
+                                        <form method="POST" action="/admin/update-order-status" class="d-flex gap-1">
                                             <input type="hidden" name="order_id" value="{{ order.order_id }}">
 
-                                            <select name="status">
-                                                <option value="Placed" {% if order.status=='Placed' %}selected{% endif
-                                                    %}>
-                                                    Placed
-                                                </option>
-                                                <option value="Preparing" {% if order.status=='Preparing' %}selected{%
-                                                    endif %}>
-                                                    Preparing</option>
-                                                <option value="Ready" {% if order.status=='Ready' %}selected{% endif %}>
-                                                    Ready
-                                                </option>
-                                                <option value="Completed" {% if order.status=='Completed' %}selected{%
-                                                    endif %}>
-                                                    Completed</option>
+                                            <select name="status" class="form-select form-select-sm">
+                                                <option value="Placed" {{ 'selected' if order.status=='Placed' else ''
+                                                    }}>Placed</option>
+                                                <option value="Preparing" {{ 'selected' if order.status=='Preparing'
+                                                    else '' }}>Preparing</option>
+                                                <option value="Ready" {{ 'selected' if order.status=='Ready' else '' }}>
+                                                    Ready</option>
+                                                <option value="Completed" {{ 'selected' if order.status=='Completed'
+                                                    else '' }}>Completed</option>
                                             </select>
 
-                                            <button type="submit">Update</button>
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                Update
+                                            </button>
                                         </form>
                                     </td>
-                                    </td>
+
+
                                     <td>{{ order.order_time }}</td>
                                 </tr>
                                 {% endfor %}
